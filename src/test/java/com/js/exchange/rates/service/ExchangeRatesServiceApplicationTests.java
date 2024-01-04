@@ -1,4 +1,4 @@
-package com.js.exchangeratesservice;
+package com.js.exchange.rates.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
