@@ -40,13 +40,6 @@ public class DBConfig {
         return dataSource;
     }
 
-    /*@Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
-        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-        factoryBean.setDataSource(createDataSource());
-        return factoryBean.getObject();
-    }*/
-
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws IllegalStateException {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
