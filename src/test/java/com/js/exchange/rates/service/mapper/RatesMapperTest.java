@@ -15,7 +15,7 @@ class RatesMapperTest {
 
     @Test
     void testFetchRates() {
-       //Given
+        //Given
 
         //When
         List<Currency> currencies = ratesMapper.fetchCurrencies();

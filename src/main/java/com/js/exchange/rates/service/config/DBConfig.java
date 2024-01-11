@@ -7,11 +7,13 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
 
 @Configuration
 @MapperScan("com.js.exchange.rates.service.mapper")
+@PropertySource("classpath:application.properties")
 public class DBConfig {
     @Value("${db.url}")
     private String url;
@@ -21,6 +23,7 @@ public class DBConfig {
     private String login;
     @Value("${db.password}")
     private String password;
+
     @Bean
     public DataSource createDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
