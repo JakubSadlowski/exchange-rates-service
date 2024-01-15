@@ -14,7 +14,7 @@ class RatesMapperTest {
     private RatesMapper ratesMapper;
 
     @Test
-    void testFetchRates() {
+    void testFetchCurrencies() {
         //Given
 
         //When
@@ -22,5 +22,18 @@ class RatesMapperTest {
 
         //Then
         Assertions.assertEquals(3, currencies.size());
+        Assertions.assertTrue(currencies.stream().anyMatch(currency -> "EUR".equals(currency.getCurrency())));
+    }
+
+    @Test
+    void testFetchExchangeRates() {
+        //Given
+
+        //When
+        List<ExchangeRate> exchangeRates = ratesMapper.fetchExchangeRates();
+
+        //Then
+        Assertions.assertEquals(1, exchangeRates.size());
+        //Assertions.assertTrue(currencies.stream().anyMatch(currency -> "EUR".equals(currency.getCurrency())));
     }
 }
