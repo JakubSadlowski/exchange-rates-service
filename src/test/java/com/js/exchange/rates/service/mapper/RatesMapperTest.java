@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +47,7 @@ class RatesMapperTest {
     private ExchangeRate createFakeExchangeRate() {
         return ExchangeRate.builder()
                 .id(1)
-                //.rate(new BigDecimal("1"))
+                .rate(new BigDecimal("1.23"))
                 .currencyFrom("USD")
                 .currencyTo("PLN")
                 .date(new Date())
