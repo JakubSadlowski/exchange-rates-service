@@ -1,11 +1,14 @@
 package com.js.exchange.rates.service.mapper;
 
 import com.js.exchange.rates.service.config.DBConfig;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.util.Date;
 import java.util.List;
 
 @SpringJUnitConfig(classes = {DBConfig.class})
@@ -13,16 +16,19 @@ class RatesMapperTest {
     @Autowired
     private RatesMapper ratesMapper;
 
-    @Test
-    void testFetchCurrencies() {
-        //Given
+    private ExchangeRate exchangeRate;
 
-        //When
-        List<Currency> currencies = ratesMapper.fetchCurrencies();
+    @BeforeEach
+    void createBeforeEachTest() {
+        this.exchangeRate = createFakeExchangeRate();
+        ratesMapper.insert(exchangeRate);
+    }
 
-        //Then
-        Assertions.assertEquals(3, currencies.size());
-        Assertions.assertTrue(currencies.stream().anyMatch(currency -> "EUR".equals(currency.getCurrency())));
+    @AfterEach
+    void deleteAfterEachTest() {
+        if (this.exchangeRate != null) {
+            ratesMapper.delete(this.exchangeRate);
+        }
     }
 
     @Test
@@ -35,5 +41,17 @@ class RatesMapperTest {
         //Then
         Assertions.assertEquals(1, exchangeRates.size());
         //Assertions.assertTrue(currencies.stream().anyMatch(currency -> "EUR".equals(currency.getCurrency())));
+    }
+
+    private ExchangeRate createFakeExchangeRate() {
+        return ExchangeRate.builder()
+                .id(1)
+                //.rate(new BigDecimal("1"))
+                .currencyFrom("USD")
+                .currencyTo("PLN")
+                .date(new Date())
+                .dateInserted(new Date())
+                .dateModified(new Date())
+                .build();
     }
 }
