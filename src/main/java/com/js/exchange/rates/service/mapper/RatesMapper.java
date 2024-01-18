@@ -22,7 +22,7 @@ public interface RatesMapper {
             select er_id ,er_currency_from, er_currency_to, er_rate, er_date, er_date_inserted, er_date_modified
               from exchange_rates.dbo.rates;
             """)
-    @Results(value = {
+    @Results(id = "exchangeRates", value = {
             @Result(property = "id", column = "er_id", javaType = Integer.class),
             @Result(property = "currencyFrom", column = "er_currency_from", javaType = String.class),
             @Result(property = "currencyTo", column = "er_currency_to", javaType = String.class),
@@ -32,6 +32,15 @@ public interface RatesMapper {
             @Result(property = "dateModified", column = "er_date_modified", javaType = Date.class),
     })
     List<ExchangeRate> fetchExchangeRates();
+
+    @Select("""
+            select er_id ,er_currency_from, er_currency_to, er_rate, er_date, er_date_inserted, er_date_modified
+              from exchange_rates.dbo.rates
+              where er_id = #{rateId}
+            """)
+    @ResultMap("exchangeRates")
+
+    ExchangeRate fetchExchangeRatesById(@Param("rateId") int id);
 
     @Insert("""
             insert into exchange_rates.dbo.rates(er_id, er_currency_from, er_currency_to, er_rate, er_date, er_date_inserted, er_date_modified)
@@ -46,4 +55,23 @@ public interface RatesMapper {
              where er_id = #{id};
             """)
     void delete(ExchangeRate exchangeRate);
+
+    @Delete("""
+            delete r
+              from exchange_rates.dbo.rates r
+             where er_id = #{rateId};
+            """)
+    void deleteV2(@Param("rateId") int id);
+
+    @Update("""
+            update r set er_currency_from = #{currencyFrom} 
+                        ,er_currency_to = #{currencyTo}
+                        ,er_rate = #{rate}
+                        ,er_date = #{date}
+                        ,er_date_inserted = #{dateInserted}
+                        ,er_date_modified = #{dateModified}
+              from exchange_rates.dbo.rates r
+             where er_id = #{id};
+            """)
+    void update(ExchangeRate exchangeRate);
 }

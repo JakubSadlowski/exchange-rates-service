@@ -27,9 +27,8 @@ class RatesMapperTest {
 
     @AfterEach
     void deleteAfterEachTest() {
-        if (this.exchangeRate != null) {
-            ratesMapper.delete(this.exchangeRate);
-        }
+        ratesMapper.deleteV2(this.exchangeRate.getId());
+        //ratesMapper.delete(this.exchangeRate);
     }
 
     @Test
@@ -42,6 +41,19 @@ class RatesMapperTest {
         //Then
         Assertions.assertEquals(1, exchangeRates.size());
         //Assertions.assertTrue(currencies.stream().anyMatch(currency -> "EUR".equals(currency.getCurrency())));
+    }
+
+    @Test
+    void testUpdateExchangeRate() {
+        //Given
+        this.exchangeRate.setRate(new BigDecimal("2.555"));
+
+        //When
+        ratesMapper.update(this.exchangeRate);
+        ExchangeRate exchangeRateUpdated = ratesMapper.fetchExchangeRatesById(this.exchangeRate.getId());
+
+        //Then
+        Assertions.assertEquals(exchangeRate, exchangeRateUpdated);
     }
 
     private ExchangeRate createFakeExchangeRate() {
