@@ -14,7 +14,7 @@ public interface RatesMapper {
             select c_currency from exchange_rates.dbo.currencies;
             """)
     @Results(value = {
-            @Result(property = "currency", column = "c_currency", javaType = String.class),
+            @Result(property = "value", column = "c_currency", javaType = String.class),
     })
     List<Currency> fetchCurrencies();
 
