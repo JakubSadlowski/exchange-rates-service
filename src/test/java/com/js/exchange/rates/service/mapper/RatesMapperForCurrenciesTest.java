@@ -22,6 +22,6 @@ class RatesMapperForCurrenciesTest {
 
         //Then
         Assertions.assertEquals(3, currencies.size());
-        Assertions.assertTrue(currencies.stream().anyMatch(currency -> "EUR".equals(currency.getCurrency())));
+        Assertions.assertTrue(currencies.stream().anyMatch(currency -> "EUR".equals(currency.getValue())));
     }
 }

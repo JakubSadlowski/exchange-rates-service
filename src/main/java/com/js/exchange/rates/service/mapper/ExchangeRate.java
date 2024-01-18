@@ -46,6 +46,11 @@ public class ExchangeRate {
         }
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, currencyFrom, currencyTo, rate, date, dateInserted, dateModified);
+    }
+
     private static boolean equalsBigDecimals(BigDecimal a, BigDecimal b) {
         return (Objects.equals(a, b)) || (a != null && a.compareTo(b) == 0);
     }
