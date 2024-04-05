@@ -57,3 +57,13 @@ REFERENCES [dbo].[currencies] ([c_currency])
 GO
 ALTER TABLE [dbo].[rates] CHECK CONSTRAINT [fk_rates_currencies_to]
 GO
+
+if not exists (select top 1 1 from exchange_rates.dbo.currencies where c_currency='PLN') begin
+	insert into exchange_rates.dbo.currencies(c_currency) values('PLN')
+end
+if not exists (select top 1 1 from exchange_rates.dbo.currencies where c_currency='EUR') begin
+	insert into exchange_rates.dbo.currencies(c_currency) values('EUR')
+end
+if not exists (select top 1 1 from exchange_rates.dbo.currencies where c_currency='USD') begin
+	insert into exchange_rates.dbo.currencies(c_currency) values('USD')
+end
