@@ -7,13 +7,15 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
 
 @Configuration
+@Profile("!dev")
 @MapperScan("com.js.exchange.rates.service.mapper")
-@PropertySource("classpath:application.properties")
+@PropertySource({"classpath:application.properties", "classpath:application-dev.properties"})
 public class DBConfig {
     @Value("${db.url}")
     private String url;
@@ -24,7 +26,7 @@ public class DBConfig {
     @Value("${db.password}")
     private String password;
 
-    @Bean
+    @Bean("exchangeRatesServiceDataSource")
     public DataSource createDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
 
@@ -41,16 +43,5 @@ public class DBConfig {
         dataSource.setValidationQueryTimeout(5);
         dataSource.setValidationQuery("SELECT 1");
         return dataSource;
-    }
-
-    @Bean
-    public SqlSessionFactory sqlSessionFactory() throws IllegalStateException {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(createDataSource());
-        try {
-            return sqlSessionFactoryBean.getObject();
-        } catch (Exception e) {
-            throw new IllegalStateException("Unable to create sqlSessionFactory ", e);
-        }
     }
 }
