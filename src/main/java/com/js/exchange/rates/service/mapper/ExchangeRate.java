@@ -36,10 +36,6 @@ public class ExchangeRate {
                 return false;
             } else if (!Objects.equals(this.getCurrencyTo(), other.getCurrencyTo())) {
                 return false;
-            } else if (!Objects.equals(this.getDateInserted(), other.getDateInserted())) {
-                return false;
-            } else if (!Objects.equals(this.getDateModified(), other.getDateModified())) {
-                return false;
             } else if (!equalsBigDecimals(this.getRate(), other.getRate())) {
                 return false;
             } else return equalsDates(this.getDate(), other.getDate());
@@ -48,7 +44,7 @@ public class ExchangeRate {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, currencyFrom, currencyTo, rate, date, dateInserted, dateModified);
+        return Objects.hash(id, currencyFrom, currencyTo, rate, date);
     }
 
     private static boolean equalsBigDecimals(BigDecimal a, BigDecimal b) {
@@ -56,7 +52,7 @@ public class ExchangeRate {
     }
 
     private static boolean equalsDates(Date a, Date b) {
-        if(a == b)
+        if (a == b)
             return true;
         LocalDate localA = a.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate localB = b.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

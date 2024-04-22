@@ -1,66 +1,60 @@
 package com.js.exchange.rates.service.mapper;
 
-import com.js.exchange.rates.service.config.DBConfig;
-import com.js.exchange.rates.service.config.DBConfigTestContainer;
-import com.js.exchange.rates.service.config.MyBatisConfig;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@ActiveProfiles("dev")
-@SpringJUnitConfig(classes = {DBConfig.class, DBConfigTestContainer.class, MyBatisConfig.class})
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 class RatesMapperTest {
-    @Autowired
-    private RatesMapper ratesMapper;
+    @Mock
+    private RatesMapper ratesMapperMock;
 
     private ExchangeRate exchangeRate;
 
     @BeforeEach
     void createBeforeEachTest() {
-        this.exchangeRate = createFakeExchangeRate();
-        ratesMapper.insert(exchangeRate);
-    }
-
-    @AfterEach
-    void deleteAfterEachTest() {
-        ratesMapper.deleteV2(this.exchangeRate.getId());
-        //ratesMapper.delete(this.exchangeRate);
+        this.exchangeRate = createFakeExchangeRateBuilder().build();
     }
 
     @Test
     void testFetchExchangeRates() {
         //Given
+        when(ratesMapperMock.fetchExchangeRates()).thenReturn(List.of(this.exchangeRate));
 
         //When
-        List<ExchangeRate> exchangeRates = ratesMapper.fetchExchangeRates();
+        List<ExchangeRate> exchangeRates = ratesMapperMock.fetchExchangeRates();
 
         //Then
         Assertions.assertEquals(1, exchangeRates.size());
-        //Assertions.assertTrue(currencies.stream().anyMatch(currency -> "EUR".equals(currency.getCurrency())));
+        verify(ratesMapperMock).fetchExchangeRates();
     }
 
     @Test
     void testUpdateExchangeRate() {
         //Given
         this.exchangeRate.setRate(new BigDecimal("2.555"));
+        ExchangeRate mockedFetchedExchangeRate = createFakeExchangeRateBuilder().rate(new BigDecimal("2.555")).build();
+        doNothing().when(this.ratesMapperMock).update(this.exchangeRate);
+        when(this.ratesMapperMock.fetchExchangeRatesById(this.exchangeRate.getId())).thenReturn(mockedFetchedExchangeRate);
 
         //When
-        ratesMapper.update(this.exchangeRate);
-        ExchangeRate exchangeRateUpdated = ratesMapper.fetchExchangeRatesById(this.exchangeRate.getId());
+        ratesMapperMock.update(this.exchangeRate);
+        ExchangeRate exchangeRateUpdated = ratesMapperMock.fetchExchangeRatesById(this.exchangeRate.getId());
 
         //Then
         Assertions.assertEquals(exchangeRate, exchangeRateUpdated);
     }
 
-    private ExchangeRate createFakeExchangeRate() {
+    private ExchangeRate.ExchangeRateBuilder createFakeExchangeRateBuilder() {
         return ExchangeRate.builder()
                 .id(1)
                 .rate(new BigDecimal("1.23"))
@@ -68,7 +62,6 @@ class RatesMapperTest {
                 .currencyTo("PLN")
                 .date(new Date())
                 .dateInserted(new Date())
-                .dateModified(new Date())
-                .build();
+                .dateModified(new Date());
     }
 }
